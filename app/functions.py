@@ -5,7 +5,10 @@ from flask import Markup
 import paramiko
 from datetime import datetime
 from time import gmtime, strftime
-
+import os
+import sys
+dir_path = os.path.dirname(os.path.realpath(__file__))
+op_sys = sys.platform
 
 def log_login(attempt ,user, password):
 	f = open('pass_log.txt', 'a')
@@ -51,11 +54,15 @@ def ssh_client(remote_location,local_location):
 
 
 def get_current_timer():
+	if op_sys == "win32":
+		local_csv = dir_path + str("\\data\\timer_data.csv")
+	else:
+		local_csv = dir_path + str("/data/timer_data.csv")
+
 	remote_csv = '/home/pi/wateringsys/timer_data.csv'
-	local_csv = "C:/Users/brent/PycharmProjects/Newcastle_Pad/app/data/timer_data.csv"
-	rem_csv = '/var/www/flask-prod/timer_data.csv'
+
 	# Get file
-	#local_csv = rem_csv
+
 	ssh_client(
 			remote_csv,
 			local_csv
@@ -78,10 +85,13 @@ def get_current_timer():
 
 
 def table():
+	if op_sys == "win32":
+		local_json = dir_path + str("\\data\\weather_data.csv")
+	else:
+		local_json = dir_path + str("/data/weather_data.csv")
+
 	remote_csv = '/home/pi/wateringsys/weather_data.csv'
-	local_json = 'C:/Users/brent/PycharmProjects/Newcastle_Pad/app/data/weather_data.json'
-	rem_json = '/var/www/flask-prod/weather_data.json'
-	#local_json = rem_json
+
 	ssh_client(
 			remote_csv,
 			local_json
