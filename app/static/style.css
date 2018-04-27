@@ -255,3 +255,9 @@ input[id=duration_text]:focus{
     display: block;
 }
 .show {display:block;}
+
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
