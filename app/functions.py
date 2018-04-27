@@ -117,9 +117,13 @@ def table():
 
 
 def service_table():
-	services = {"Sonarr": False, "Plex Media Server": False, "Open VPN": False}
+	red_light = False
+	green_light = True
+
+	services = {"Sonarr": False, "Plex Media Server": False, "Open VPN": False, "Tautulli": False}
 	for k, v in services.items():
-		stat = os.system('service {} status'.format(k.strip().lower()))
+		stat = os.system('service {} status'.format(k.replace(" ", "").lower()))
+		print(k.replace(" ", "").lower())
 		if stat == 0:
 			services[k] = True
 

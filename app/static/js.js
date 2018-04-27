@@ -105,3 +105,9 @@ window.onclick = function(event) {
 
 }
 
+    $(function() {
+$('td').each(function() {
+    $(this).html($(this).html().replace('True', '<div class="led-box"><div class="led-green"></div></div>'));
+    $(this).html($(this).html().replace('False', '<div class="led-box"><div class="led-red"></div></div>'));
+});
+});
