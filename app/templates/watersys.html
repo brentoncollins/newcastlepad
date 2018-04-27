@@ -1,0 +1,57 @@
+<!-- watersys.html-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	{% extends "base.html" %} {% block title %}Home{% endblock %} {% block body %}
+	<div class="jumbotron">
+		<div class="timebutton1">
+			<h1>Watering system control panel</h1>
+			<h1>Set new timer</h1>
+			<h2>Choose a watering time</h2>
+			<div class="dropdown1">
+				<button class="dropbtn1" onclick="drop1Function()">Dropdown</button>
+				<div class="dropdown1-content" id="myDropdown1">
+					{% for entry in entries %} <input id = "dropbtn" type="submit" name= {{ entry }} value= {{ entry }} onclick="timeFunction('{{ entry }}')"> {% endfor %}
+				</div>
+			</div>
+		</div>
+		<div class="timebutton2">
+			<h2>Choose a frequency (days)</h2>
+			<div class="dropdown2">
+				<button class="dropbtn2" onclick="drop2Function()">Dropdown</button>
+				<div class="dropdown2-content" id="myDropdown2">
+					{% for x in days %} <input id = "dropbtn" type="submit" name= {{ x }} value= {{ x }} onclick="frequencyFunction('{{ x }}')"> {% endfor %}
+				</div>
+			</div>
+		</div>
+		<p class="durationbutton"></p>
+		<h2>Choose watering duration (seconds)</h2>
+		<div class="water_duration">
+			Watering Duration: <input id="duration_text" type="text" value="30"><button class="dropbtn3" onclick="durationFunction()">OK</button>
+			<form action='/water_time' method="post">
+				<button class="dropbtn4" id="button1" name='button1' style="visibility:hidden;" type="submit" value='Test'>Set Timer</button>
+			</form>
+		</div>
+		<div class="outputtext" id="outputtext">
+
+		</div>
+		<p id="error_output"></p>
+		<h2>{% with messages = get_flashed_messages() %} {% if messages %}</h2>
+		<div class="flashes" style="margin-left: 2em">
+			{% for message in messages %} {{ message }} {% endfor %}
+		</div>{% endif %} {% endwith %}
+		<div class="currenttime">
+			{{current_timer}}
+		</div>
+		<div class="table">
+			{{table_data}}
+		</div>
+        </div>
+        </div>
+        </div>
+    {% endblock %}
+</body>
+</html>
