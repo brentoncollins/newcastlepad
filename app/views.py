@@ -6,11 +6,12 @@ from flask_login import LoginManager, UserMixin
 import flask_login
 from datetime import datetime
 from passlib.hash import pbkdf2_sha256
+from shutil import copyfile
 
-hash = "$pbkdf2-sha256$200000$2VurNaZUilGKMYbQGkOIEQ$Ye8XIkqYZVCaPnttm0W27whUajlEA6NvFPIaJhLOorU"
 
-
+hash_pwd = "$pbkdf2-sha256$200000$2VurNaZUilGKMYbQGkOIEQ$Ye8XIkqYZVCaPnttm0W27whUajlEA6NvFPIaJhLOorU"
 users = ['bobcat']
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.secret_key = os.urandom(12)
@@ -42,7 +43,7 @@ def request_loader(request):
 
 		# DO NOT ever store passwords in plaintext and always compare password
 		# hashes using constant-time comparison!
-		user.is_authenticated = pbkdf2_sha256.verify(request.form['password'], hash)
+		user.is_authenticated = pbkdf2_sha256.verify(request.form['password'], hash_pwd)
 		return user
 
 
@@ -54,13 +55,13 @@ def login():
 		email = request.form['email']
 		if request.form['email'] is None:
 			return redirect(url_for('login'))
-		if pbkdf2_sha256.verify(request.form['password'], hash) is True:
+		if pbkdf2_sha256.verify(request.form['password'], hash_pwd) is True:
 				user = User()
 				user.id = email
 				flask_login.login_user(user)
 				return index()
 		else:
-			functions.log_login(pbkdf2_sha256.verify(request.form['password'], hash), email, request.form['password'])
+			functions.log_login(pbkdf2_sha256.verify(request.form['password'], hash_pwd), email, request.form['password'])
 			flash("Wrong login or password.")
 			return redirect(url_for('login'))
 
@@ -73,7 +74,7 @@ def logout():
 
 
 @app.route('/')
-@flask_login.login_required
+#@flask_login.login_required
 def home():
 	return render_template("index.html")
 
@@ -84,10 +85,22 @@ def protected():
 	return 'Logged in as: ' + flask_login.current_user.id
 
 
-@app.route('/index')
+#@app.route('/index')
 @flask_login.login_required
 def index():
 	return render_template("index.html")
+
+
+@app.route('/internet')
+#@flask_login.login_required
+def internet():
+	services = {"sonarr": False, "plexmediaserver": False, "openvep": False}
+	for k, v in services.items():
+		stat = os.system('service {} status'.format(k))
+		if stat == 0:
+			services[k] = True
+
+	return render_template("internet.html", service_status=services)
 
 
 @app.route('/about')

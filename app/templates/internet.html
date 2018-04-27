@@ -1,0 +1,12 @@
+<!-- about.html-->
+
+{% extends "base.html" %}
+{% block title %}Internet{% endblock %}
+{% block body %}
+<div class="jumbotron">
+  <h1>Services status page</h1>
+<img src="/static/speed.png" alt="Internet speed plot">
+
+{{ services }}
+</div>
+{% endblock %}

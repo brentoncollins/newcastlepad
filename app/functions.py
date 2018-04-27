@@ -10,6 +10,7 @@ import sys
 dir_path = os.path.dirname(os.path.realpath(__file__))
 op_sys = sys.platform
 
+
 def log_login(attempt ,user, password):
 	f = open('pass_log.txt', 'a')
 	cur_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -19,6 +20,7 @@ def log_login(attempt ,user, password):
 	else:
 		f.write('{} - Successful login attempt - User:{} -  Password:{}\n'.format(cur_time, user, password))
 		f.close()
+
 
 def ssh_client_command(arg1, arg2, arg3):
 	try:
@@ -36,10 +38,6 @@ def ssh_client_command(arg1, arg2, arg3):
 
 	finally:
 		return cron_status
-
-
-
-
 
 
 def ssh_client(remote_location,local_location):
