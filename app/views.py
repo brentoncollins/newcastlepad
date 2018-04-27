@@ -94,13 +94,10 @@ def index():
 @app.route('/internet')
 #@flask_login.login_required
 def internet():
-	services = {"sonarr": False, "plexmediaserver": False, "openvep": False}
-	for k, v in services.items():
-		stat = os.system('service {} status'.format(k))
-		if stat == 0:
-			services[k] = True
 
-	return render_template("internet.html", service_status=services)
+	table = functions.service_table()
+
+	return render_template("internet.html", service_status=table)
 
 
 @app.route('/about')

@@ -116,3 +116,17 @@ def table():
 	return json_obj_in_html
 
 
+def service_table():
+	services = {"Sonarr": False, "Plex Media Server": False, "Open VPN": False}
+	for k, v in services.items():
+		stat = os.system('service {} status'.format(k.strip().lower()))
+		if stat == 0:
+			services[k] = True
+
+	data = json.dumps([{'Service': k, 'Status': v} for k, v in services.items()], indent=4)
+
+	json_obj_in_html = Markup(json2html.convert(
+		json=data, table_attributes="class=\"table table-bordered table-hover\""))
+
+
+	return json_obj_in_html
