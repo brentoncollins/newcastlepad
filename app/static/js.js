@@ -73,6 +73,9 @@ function drop2Function() {
     document.getElementById("myDropdown2").classList.toggle("show");
 }
 
+function drop3Function() {
+    document.getElementById("myDropdown3").classList.toggle("show");
+}
 window.onclick = function(event) {
     if (!event.target.matches('.dropbtn2')) {
 
@@ -99,5 +102,6 @@ window.onclick = function(event) {
         }
 
     }
+
 }
 

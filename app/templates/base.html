@@ -15,18 +15,26 @@
   <body>
     <div class="container">
       <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-              <li role="presentation"><a href="/watersys">Watering System</a></li>
-              <li role="presentation"><a href="/">Internet Stats</a></li>
-              <li role="presentation"><a href="/about">Cockpit</a></li>
-              <li role="presentation"><a href="/about">Guacamole</a></li>
-              <li role="presentation"><a href="/about">Qbittorrent</a></li>
-              <li role="presentation"><a href="/about">Sonarr</a></li>
-              <li role="presentation"><a href="/about">Talituli</a></li>
-              <li role="presentation"><a href="/logout">Logout</a></li>
-          </ul>
-        </nav>
+
+
+                 <div class="navbar">
+                  <a href="#home">Home</a>
+                  <div class="dropdown">
+                    <button class="dropbtn">Menu
+                      <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                      <a href="/watersys">Watering System</a>
+                      <a href="http://www.guacamole.newcastlepad.com">Guacamole</a>
+                      <a href="http://www.qbittorrent.newcastlepad.com">Qbittorrent</a>
+                        <a href="#">Cockpit</a>
+                        <a href="#">Internet Stats</a>
+                        <a href="#">Tatuli</a>
+
+
+                    </div>
+                  </div>
+                </div>
       </div>
       {% block body %}
       {% endblock %}
