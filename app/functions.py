@@ -167,10 +167,11 @@ def getfiles():
 		slash = str("/")
 
 	for file in os.listdir(direc):
-		size = os.path.getsize(app.instance_path + "{}{}".format(slash, file))
 
+		if file == ".gitignore":
+			continue
+		size = os.path.getsize(app.instance_path + "{}{}".format(slash, file))
 		file_dict[file] = humanbytes(size)
-	print(file_dict)
 
 	data = json.dumps([{'File': k, 'Size': v} for k, v in file_dict.items()], indent=4)
 
