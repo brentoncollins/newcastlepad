@@ -1,0 +1,14 @@
+<!-- index.html-->
+
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+{% block body %}
+<div class="jumbotron">
+<form action = "/uploader" method = "POST" enctype = "multipart/form-data">
+         <input type = "file" name = "file" />
+         <input type = "submit"/>
+      </form>
+</div>
+
+    {{ file_table }}
+{% endblock %}

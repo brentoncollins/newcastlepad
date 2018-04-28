@@ -6,8 +6,9 @@ from flask_login import LoginManager, UserMixin
 import flask_login
 from datetime import datetime
 from passlib.hash import pbkdf2_sha256
-from shutil import copyfile
-
+from werkzeug.utils import secure_filename
+from os import listdir
+from os.path import isfile, join
 
 hash_pwd = "$pbkdf2-sha256$200000$2VurNaZUilGKMYbQGkOIEQ$Ye8XIkqYZVCaPnttm0W27whUajlEA6NvFPIaJhLOorU"
 users = ['bobcat']
@@ -139,4 +140,21 @@ def time_input():
 	return redirect(url_for('watersys'))
 #	return ('', 204)
 
+
+@app.route('/upload')
+def upload():
+	os.path.getsize
+	only_files = [f for f in listdir(app.instance_path) if isfile(join(app.instance_path, f))]
+	table = functions.getfiles()
+	print(only_files)
+	return render_template('upload.html',file_table = table)
+
+
+@app.route('/uploader', methods=['GET', 'POST'])
+def upload_file():
+	if request.method == 'POST':
+		f = request.files['file']
+		f.save(os.path.join(app.instance_path, secure_filename(f.filename)))
+		flash('{} uploaded successfully'.format(f.filename))
+		return redirect(url_for("upload"))
 
