@@ -142,6 +142,7 @@ def time_input():
 
 
 @app.route('/upload')
+@flask_login.login_required
 def upload():
 	os.path.getsize
 	only_files = [f for f in listdir(app.instance_path) if isfile(join(app.instance_path, f))]
@@ -151,6 +152,7 @@ def upload():
 
 
 @app.route('/uploader', methods=['GET', 'POST'])
+@flask_login.login_required
 def upload_file():
 	if request.method == 'POST':
 		f = request.files['file']
