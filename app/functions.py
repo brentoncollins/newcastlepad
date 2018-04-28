@@ -132,24 +132,26 @@ def service_table():
 
 	return json_obj_in_html
 
-def humanbytes(B):
-   'Return the given bytes as a human friendly KB, MB, GB, or TB string'
-   B = float(B)
-   KB = float(1024)
-   MB = float(KB ** 2) # 1,048,576
-   GB = float(KB ** 3) # 1,073,741,824
-   TB = float(KB ** 4) # 1,099,511,627,776
 
-   if B < KB:
-      return '{0} {1}'.format(B,'Bytes' if 0 == B > 1 else 'Byte')
-   elif KB <= B < MB:
-      return '{0:.2f} KB'.format(B/KB)
-   elif MB <= B < GB:
-      return '{0:.2f} MB'.format(B/MB)
-   elif GB <= B < TB:
-      return '{0:.2f} GB'.format(B/GB)
-   elif TB <= B:
-      return '{0:.2f} TB'.format(B/TB)
+def humanbytes(b):
+	"""Return the given bytes as a human friendly KB, MB, GB, or TB string"""
+	b = float(b)
+	kb = float(1024)
+	mb = float(kb ** 2) # 1,048,576
+	gb = float(kb ** 3) # 1,073,741,824
+	tb = float(kb ** 4) # 1,099,511,627,776
+
+	if b < kb:
+		return '{0} {1}'.format(b, 'Bytes' if 0 == b > 1 else 'Byte')
+	elif kb <= b < mb:
+		return '{0:.2f} KB'.format(b/kb)
+	elif mb <= b < gb:
+		return '{0:.2f} MB'.format(b/mb)
+	elif gb <= b < tb:
+		return '{0:.2f} GB'.format(b/gb)
+	elif tb <= b:
+		return '{0:.2f} TB'.format(b/tb)
+
 
 def getfiles():
 	direc = os.path.join(app.instance_path)
@@ -159,9 +161,13 @@ def getfiles():
 	# Create an empty dict
 
 	# Select only files with the ext extension
+	if op_sys == "win32":
+		slash = str("\\")
+	else:
+		slash = str("/")
 
 	for file in os.listdir(direc):
-		size = os.path.getsize(app.instance_path + "\\{}".format(file))
+		size = os.path.getsize(app.instance_path + "{}{}".format(slash, file))
 
 		file_dict[file] = humanbytes(size)
 	print(file_dict)
