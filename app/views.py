@@ -1,4 +1,4 @@
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, Markup, send_from_directory
 from app import app
 import os
 from app import functions
@@ -7,8 +7,7 @@ import flask_login
 from datetime import datetime
 from passlib.hash import pbkdf2_sha256
 from werkzeug.utils import secure_filename
-from os import listdir
-from os.path import isfile, join
+
 
 hash_pwd = "$pbkdf2-sha256$200000$2VurNaZUilGKMYbQGkOIEQ$Ye8XIkqYZVCaPnttm0W27whUajlEA6NvFPIaJhLOorU"
 users = ['bobcat']
@@ -25,7 +24,6 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def user_loader(email):
-
 		if email not in users:
 			return
 		user = User()
@@ -34,11 +32,9 @@ def user_loader(email):
 
 @login_manager.request_loader
 def request_loader(request):
-
 		email = request.form.get('email')
 		if email not in users:
 			return
-
 		user = User()
 		user.id = email
 
@@ -50,20 +46,23 @@ def request_loader(request):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
 		if request.method == 'GET':
+
 			return render_template("login.html")
 		email = request.form['email']
 		if request.form['email'] is None:
+
 			return redirect(url_for('login'))
 		if pbkdf2_sha256.verify(request.form['password'], hash_pwd) is True:
 				user = User()
 				user.id = email
 				flask_login.login_user(user)
+
 				return index()
 		else:
 			functions.log_login(pbkdf2_sha256.verify(request.form['password'], hash_pwd), email, request.form['password'])
 			flash("Wrong login or password.")
+
 			return redirect(url_for('login'))
 
 
@@ -75,27 +74,29 @@ def logout():
 
 
 @app.route('/')
-#@flask_login.login_required
+@flask_login.login_required
 def home():
+
 	return render_template("index.html")
 
 
 @app.route('/protected')
 @flask_login.login_required
 def protected():
+
 	return 'Logged in as: ' + flask_login.current_user.id
 
 
-#@app.route('/index')
+@app.route('/index')
 @flask_login.login_required
 def index():
+
 	return render_template("index.html")
 
 
 @app.route('/internet')
-#@flask_login.login_required
+@flask_login.login_required
 def internet():
-
 	table = functions.service_table()
 
 	return render_template("internet.html", service_status=table)
@@ -104,6 +105,7 @@ def internet():
 @app.route('/about')
 @flask_login.login_required
 def about():
+
 	return render_template("about.html")
 
 
@@ -126,37 +128,52 @@ def watersys():
 @app.route("/water_time", methods=['GET', 'POST'])
 @flask_login.login_required
 def time_input():
-	print(request.form['button1'])
 	x = (request.form['button1'].split(','))
-	print(x)
-
 	d = datetime.strptime(x[0], "%I%p")
 	hour = d.strftime("%H")
-
-	print(x)
 	cron_status = functions.ssh_client_command(hour, x[1], x[2])
 	flash(cron_status)
 
 	return redirect(url_for('watersys'))
-#	return ('', 204)
+# return ('', 204)
 
 
 @app.route('/upload')
 @flask_login.login_required
 def upload():
-	os.path.getsize
-	only_files = [f for f in listdir(app.instance_path) if isfile(join(app.instance_path, f))]
-	table = functions.getfiles()
-	print(only_files)
-	return render_template('upload.html',file_table = table)
+	table = Markup(functions.getfiles())
+
+	return render_template('upload.html', file_table=table)
 
 
 @app.route('/uploader', methods=['GET', 'POST'])
 @flask_login.login_required
 def upload_file():
 	if request.method == 'POST':
-		f = request.files['file']
-		f.save(os.path.join(app.instance_path, secure_filename(f.filename)))
+		for f in request.files.getlist('file'):
+			f.save(os.path.join(app.instance_path, secure_filename(f.filename)))
 		flash('{} uploaded successfully'.format(f.filename))
+
+		return redirect(url_for("upload"))
+
+
+@app.route('/downloader', methods=['GET', 'POST'])
+@flask_login.login_required
+def get_file():
+	if request.method == 'POST':
+		f = request.form['filename']
+		send_from_directory(os.path.join(app.instance_path), f)
+
+	return send_from_directory(os.path.join(app.instance_path), f, as_attachment=True)
+
+
+@app.route('/remove_file', methods=['GET', 'POST'])
+@flask_login.login_required
+def remove_file():
+	if request.method == 'POST':
+		f = request.form['filename']
+		path = "{}{}{}".format(os.path.join(app.instance_path), functions.get_slash(), f)
+		os.remove(path)
+
 		return redirect(url_for("upload"))
 

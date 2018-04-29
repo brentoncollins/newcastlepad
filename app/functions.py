@@ -1,19 +1,19 @@
 import csv
 from json2html import *
-import json
+import html
 from flask import Markup
 import paramiko
 from datetime import datetime
 from time import gmtime, strftime
 import os
 from app import app
-
+import json
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 op_sys = sys.platform
 
 
-def log_login(attempt ,user, password):
+def log_login(attempt, user, password):
 	f = open('pass_log.txt', 'a')
 	cur_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 	if attempt is False:
@@ -54,6 +54,7 @@ def ssh_client(remote_location,local_location):
 
 
 def get_current_timer():
+	"""Get the current timer status"""
 	if op_sys == "win32":
 		local_csv = dir_path + str("\\data\\timer_data.csv")
 	else:
@@ -85,6 +86,7 @@ def get_current_timer():
 
 
 def table():
+	"""Create table to view weather stats"""
 	if op_sys == "win32":
 		local_json = dir_path + str("\\data\\weather_data.csv")
 	else:
@@ -96,7 +98,6 @@ def table():
 			remote_csv,
 			local_json
 			)
-
 
 	f = open(local_json)
 
@@ -119,12 +120,16 @@ def table():
 
 
 def service_table():
+	"""Create a table to see services running"""
+	# Add services that you want to check, set to false.
 	services = {"Sonarr": False, "Plex Media Server": False, "Open VPN": False, "Tautulli": False}
 	for k, v in services.items():
+		# Get the status of all services, if 0 (Running) else (Not running)
 		stat = os.system('service {} status'.format(k.replace(" ", "").lower()))
 		print(k.replace(" ", "").lower())
 		if stat == 0:
 			services[k] = True
+	# Create table for services.
 	data = json.dumps([{'Service': k, 'Status': v} for k, v in services.items()], indent=4)
 
 	json_obj_in_html = Markup(json2html.convert(
@@ -153,33 +158,43 @@ def humanbytes(b):
 		return '{0:.2f} TB'.format(b/tb)
 
 
-def getfiles():
-	direc = os.path.join(app.instance_path)
-	# Get current working directory
+def remove_file(file):
+	"""Remove file from uploads"""
+	os.remove(file)
 
-	file_dict = {}
-	# Create an empty dict
 
-	# Select only files with the ext extension
+def get_slash():
+	"""Get the string of correct backslash for windows/linux"""
 	if op_sys == "win32":
 		slash = str("\\")
 	else:
 		slash = str("/")
 
-	for file in os.listdir(direc):
+	return slash
 
+
+def getfiles():
+	"""Create table of all files in directory"""
+	direc = os.path.join(app.instance_path)
+	# Get current working directory
+
+	slash = get_slash()
+
+	json_obj = []
+	# Create dict to convert into json
+	for file in os.listdir(direc):
 		if file == ".gitignore":
 			continue
 		size = os.path.getsize(app.instance_path + "{}{}".format(slash, file))
-		file_dict[file] = humanbytes(size)
+		json_obj.append({"File":
+								"<form action = '/downloader' method = 'POST'> <button type = 'submit' name ='filename' value = '{}' id = 'name' class = 'btn-link'> {} </button></form>".format(file, file, file),
+								"Size" : humanbytes(size),"Remove" : "<form action = '/remove_file' method = 'POST'> <button type = 'submit' name ='filename' value = '{}' id = 'name' class = 'btn-link'> {} </button></form>".format(file, "Delete")})
 
-	data = json.dumps([{'File': k, 'Size': v} for k, v in file_dict.items()], indent=4)
-
+	# Encode dict to json
+	data = (json.dumps(json_obj))
+	# Pass to json2html and wrap with Markup to ensure all chars are returned into html format.
 	json_obj_in_html = Markup(json2html.convert(
 		json=data, table_attributes="class=\"table table-bordered table-hover\""))
 
-	return json_obj_in_html
-
-
-
+	return html.unescape(json_obj_in_html)
 
