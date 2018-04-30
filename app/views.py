@@ -110,7 +110,7 @@ def about():
 
 
 @app.route('/watersys')
-#@flask_login.login_required
+@flask_login.login_required
 def watersys():
 
 	return render_template(

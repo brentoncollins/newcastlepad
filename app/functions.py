@@ -107,8 +107,6 @@ def weather_table():
 	# Parse the CSV into JSON in reverse
 	json_file = ([row for row in reversed(list(reader))])
 
-	# Save the JSON
-
 	f.close()
 
 	json_obj_in_html = Markup(json2html.convert(
@@ -127,11 +125,9 @@ def service_table():
 		print(k.replace(" ", "").lower())
 		if stat == 0:
 			services[k] = True
-	# Create table for services.
-	data = json.dumps([{'Service': k, 'Status': v} for k, v in services.items()], indent=4)
 
 	json_obj_in_html = Markup(json2html.convert(
-		json=data, table_attributes="class=\"table table-bordered table-hover\""))
+		json=services, table_attributes="class=\"table table-bordered table-hover\""))
 
 	return json_obj_in_html
 
@@ -188,11 +184,10 @@ def getfiles():
 								"<form action = '/downloader' method = 'POST'> <button type = 'submit' name ='filename' value = '{}' id = 'name' class = 'btn-link'> {} </button></form>".format(file, file, file),
 								"Size" : humanbytes(size),"Remove" : "<form action = '/remove_file' method = 'POST'> <button type = 'submit' name ='filename' value = '{}' id = 'name' class = 'btn-link'> {} </button></form>".format(file, "Delete")})
 
-	# Encode dict to json
-	data = (json.dumps(json_obj))
+
 	# Pass to json2html and wrap with Markup to ensure all chars are returned into html format.
 	json_obj_in_html = Markup(json2html.convert(
-		json=data, table_attributes="class=\"table table-bordered table-hover\""))
+		json=json_obj, table_attributes="class=\"table table-bordered table-hover\""))
 
 	return html.unescape(json_obj_in_html)
 
