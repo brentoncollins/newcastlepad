@@ -115,7 +115,7 @@ def watersys():
 
 	return render_template(
 		"watersys.html",
-		table_data=functions.table(),
+		table_data=functions.weather_table(),
 		current_timer=functions.get_current_timer(),
 		entries=[
 			"1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM",
@@ -149,13 +149,17 @@ def upload():
 @app.route('/uploader', methods=['GET', 'POST'])
 @flask_login.login_required
 def upload_file():
-	if request.method == 'POST':
-		for f in request.files.getlist('file'):
-			f.save(os.path.join(app.instance_path, secure_filename(f.filename)))
-		flash('{} uploaded successfully'.format(f.filename))
+	try:
+		if request.method == 'POST':
+			for f in request.files.getlist('file'):
+				f.save(os.path.join(app.instance_path, secure_filename(f.filename)))
 
+				flash('{} uploaded successfully.'.format(f.filename))
+
+			return redirect(url_for("upload"))
+	except UnboundLocalError:
+		flash("No file selected.")
 		return redirect(url_for("upload"))
-
 
 @app.route('/downloader', methods=['GET', 'POST'])
 @flask_login.login_required

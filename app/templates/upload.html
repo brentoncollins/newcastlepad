@@ -8,6 +8,12 @@
          <input type = "file" name = "file" multiple=""/>
          <input type = "submit"/>
       </form>
+
+<p id="error_output"></p>
+		<h3>{% with messages = get_flashed_messages() %} {% if messages %}</h3>
+		<div class="flashes" style="margin-left: 2em">
+			{% for message in messages %} {{ message }} {% endfor %}
+		</div>{% endif %} {% endwith %}
 </div>
 
     {{ file_table }}

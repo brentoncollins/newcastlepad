@@ -9,6 +9,7 @@ import os
 from app import app
 import json
 
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 op_sys = sys.platform
 
@@ -85,7 +86,7 @@ def get_current_timer():
 	return timer_string
 
 
-def table():
+def weather_table():
 	"""Create table to view weather stats"""
 	if op_sys == "win32":
 		local_json = dir_path + str("\\data\\weather_data.csv")
@@ -106,15 +107,11 @@ def table():
 	# Parse the CSV into JSON in reverse
 	out = json.dumps([row for row in reversed(list(reader))])
 	# Save the JSON
-	f = open(local_json, 'w')
-	f.write(out)
+
 	f.close()
 
-	with open(local_json) as data_file:
-		data = json.load(data_file)
-
 	json_obj_in_html = Markup(json2html.convert(
-		json=data, table_attributes="class=\"table table-bordered table-hover\""))
+		json=out, table_attributes="class=\"table table-bordered table-hover\""))
 
 	return json_obj_in_html
 
