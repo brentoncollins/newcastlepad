@@ -22,6 +22,7 @@
 
 				<div class="control-group">
 				<input type='password' name='password' id='password' placeholder='password'/>
+                    <input type="hidden" name="location" value={{ next_page }}>
 				<label class="login-field-icon fui-lock" for="login-pass"></label>
 				</div>
                 {% with messages = get_flashed_messages() %}

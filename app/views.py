@@ -43,22 +43,39 @@ def request_loader(request):
 		user.is_authenticated = pbkdf2_sha256.verify(request.form['password'], hash_pwd)
 		return user
 
+@login_manager.unauthorized_handler
+def handle_needs_login():
+    flash("You have to be logged in to access this page.")
+
+    return redirect(url_for('login', next_page=request.endpoint))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-		if request.method == 'GET':
 
-			return render_template("login.html")
+		next_page = request.args.get("next_page")
+
+		if request.method == 'GET':
+			# Pass variable to html so it doesn't get lost
+			return render_template("login.html", next_page = request.args.get("next_page"))
+
 		email = request.form['email']
 		if request.form['email'] is None:
 
 			return redirect(url_for('login'))
+		next_page = request.form['location']
+		print(next_page)
 		if pbkdf2_sha256.verify(request.form['password'], hash_pwd) is True:
+				# Get stored html variable back for redirect to next page.
+				next_page = request.form['location']
+				print(next_page)
 				user = User()
 				user.id = email
 				flask_login.login_user(user)
+				print(next_page[:-1])
 
-				return index()
+
+				return redirect(url_for(next_page))
+				#return index()
 		else:
 			functions.log_login(pbkdf2_sha256.verify(request.form['password'], hash_pwd), email, request.form['password'])
 			flash("Wrong login or password.")
