@@ -7,7 +7,7 @@ import flask_login
 from datetime import datetime
 from passlib.hash import pbkdf2_sha256
 from werkzeug.utils import secure_filename
-
+import sys
 
 hash_pwd = "$pbkdf2-sha256$200000$2VurNaZUilGKMYbQGkOIEQ$Ye8XIkqYZVCaPnttm0W27whUajlEA6NvFPIaJhLOorU"
 users = ['bobcat']
@@ -51,12 +51,11 @@ def handle_needs_login():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
-		next_page = request.args.get("next_page")
+		version= (sys.version_info[:])
 
 		if request.method == 'GET':
 			# Pass variable to html so it doesn't get lost
-			return render_template("login.html", next_page = request.args.get("next_page"))
+			return render_template("login.html", next_page=request.args.get("next_page"), python = version)
 
 		email = request.form['email']
 		if request.form['email'] is None:
