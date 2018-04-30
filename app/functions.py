@@ -105,13 +105,14 @@ def weather_table():
 	# Change each field name to the appropriate field name. I know, so difficult.
 	reader = csv.DictReader(f, fieldnames=("Time", "Temperature", "Humidity","Water Level"))
 	# Parse the CSV into JSON in reverse
-	out = json.dumps([row for row in reversed(list(reader))])
+	json_file = ([row for row in reversed(list(reader))])
+
 	# Save the JSON
 
 	f.close()
 
 	json_obj_in_html = Markup(json2html.convert(
-		json=out, table_attributes="class=\"table table-bordered table-hover\""))
+		json=json_file, table_attributes="class=\"table table-bordered table-hover\""))
 
 	return json_obj_in_html
 
