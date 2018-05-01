@@ -127,7 +127,7 @@ def service_table():
 				({"Service": 'Cockpit', "Status": False, "Port": "9090"}),
 				({"Service": 'Guacamole', "Status": 'apache2', "Port": "8080"}),
 				({"Service": 'Qbittorrent', "Status": 'apache2', "Port": "8090"}),
-				({"Service": 'OpenVPN Status', "Status": 'apache2', "Port": "5555"}),
+				#({"Service": 'OpenVPN Status', "Status": 'apache2', "Port": "5555"}),
 				]
 
 	for k in services:
