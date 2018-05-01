@@ -7,6 +7,7 @@ from datetime import datetime
 from time import gmtime, strftime
 import os
 from app import app
+import urllib.request
 import json
 
 
@@ -118,14 +119,37 @@ def weather_table():
 def service_table():
 	"""Create a table to see services running"""
 	# Add services that you want to check, set to false.
-	services = {"Sonarr": False, "Plex Media Server": False, "Open VPN": False, "Tautulli": False, "Jackett": False}
-	for k, v in services.items():
-		# Get the status of all services, if 0 (Running) else (Not running)
-		stat = os.system('service {} status'.format(k.replace(" ", "").lower()))
-		print(k.replace(" ", "").lower())
-		if stat == 0:
-			services[k] = True
+	services = [({"Service":'Sonarr',"Status": False, "Port": "8090"}),
+				({"Service": 'Plex Media Server', "Status": False, "Port": "N/A"}),
+				({"Service": 'OpenVPN', "Status": False, "Port": "N/A"}),
+				({"Service": 'Tutulli', "Status": False, "Port": "8090"}),
+				({"Service": 'Jackett', "Status": False, "Port": "9117"}),
+				({"Service": 'Cockpit', "Status": False, "Port": "9090"}),
+				({"Service": 'Guacamole', "Status": 'apache2', "Port": "8080"}),
+				({"Service": 'Qbittorrent', "Status": 'apache2', "Port": "8090"}),
+				({"Service": 'OpenVPN Status', "Status": 'apache2', "Port": "5555"}),
+				]
 
+	for k in services:
+		print(k)
+		# Get the status of all services, if 0 (Running) else (Not running)
+		if k['Status'] is False:
+			stat = os.system('service {} status'.format(k['Service'].replace(" ", "").lower()))
+			print(stat)
+			print(k['Service'].replace(" ", "").lower())
+			if stat == 0:
+				k['Status'] = True
+		if k['Status'] is "apache2":
+			k['Status'] = False
+			try:
+				status = urllib.request.urlopen("http://127.0.0.1:{}".format(k['Port'])).getcode()
+			except urllib.error.URLError:
+				continue
+			print(status)
+			if status is 200:
+				k['Status'] = True
+			else:
+				k['Status'] = False
 	json_obj_in_html = Markup(json2html.convert(
 		json=services, table_attributes="class=\"table table-bordered table-hover\""))
 
