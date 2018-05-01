@@ -118,7 +118,7 @@ def weather_table():
 def service_table():
 	"""Create a table to see services running"""
 	# Add services that you want to check, set to false.
-	services = {"Sonarr": False, "Plex Media Server": False, "Open VPN": False, "Tautulli": False}
+	services = {"Sonarr": False, "Plex Media Server": False, "Open VPN": False, "Tautulli": False, "Jackett": False}
 	for k, v in services.items():
 		# Get the status of all services, if 0 (Running) else (Not running)
 		stat = os.system('service {} status'.format(k.replace(" ", "").lower()))
