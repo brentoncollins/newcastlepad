@@ -111,3 +111,4 @@ $('td').each(function() {
     $(this).html($(this).html().replace('False', '<div class="led-box"><div class="led-red"></div></div>'));
 });
 });
+

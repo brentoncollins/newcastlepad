@@ -157,20 +157,23 @@ def time_input():
 @app.route('/upload')
 @flask_login.login_required
 def upload():
-	table = Markup(functions.getfiles())
+	items = functions.getfiles()
 
-	return render_template('upload.html', file_table=table)
+	return render_template('upload.html', file_table=items[1], file_list=items[0])
 
 
 @app.route('/uploader', methods=['GET', 'POST'])
 @flask_login.login_required
 def upload_file():
+	file_list = functions.getfiles()
 	try:
 		if request.method == 'POST':
 			for f in request.files.getlist('file'):
-				f.save(os.path.join(app.instance_path, secure_filename(f.filename)))
-
-				flash('{} uploaded successfully.'.format(f.filename))
+				if f.filename in file_list[0]:
+					flash('{} already exists.'.format(f.filename))
+				else:
+					f.save(os.path.join(app.instance_path, secure_filename(f.filename)))
+					flash('{} uploaded successfully.'.format(f.filename))
 
 			return redirect(url_for("upload"))
 	except UnboundLocalError:

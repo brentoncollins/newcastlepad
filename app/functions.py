@@ -8,7 +8,6 @@ from time import gmtime, strftime
 import os
 from app import app
 import urllib.request
-import json
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -195,7 +194,7 @@ def getfiles():
 	"""Create table of all files in directory"""
 	direc = os.path.join(app.instance_path)
 	# Get current working directory
-
+	file_list = []
 	slash = get_slash()
 
 	json_obj = []
@@ -203,6 +202,7 @@ def getfiles():
 	for file in os.listdir(direc):
 		if file == ".gitignore":
 			continue
+		file_list.append(file)
 		size = os.path.getsize(app.instance_path + "{}{}".format(slash, file))
 		json_obj.append({"File":
 								"<form action = '/downloader' method = 'POST'> <button type = 'submit' name ='filename' value = '{}' id = 'name' class = 'btn-link'> {} </button></form>".format(file, file, file),
@@ -210,8 +210,8 @@ def getfiles():
 
 
 	# Pass to json2html and wrap with Markup to ensure all chars are returned into html format.
-	json_obj_in_html = Markup(json2html.convert(
-		json=json_obj, table_attributes="class=\"table table-bordered table-hover\""))
+	json_obj_in_html = json2html.convert(
+		json=json_obj, table_attributes="class=\"table table-bordered table-hover\"")
 
-	return html.unescape(json_obj_in_html)
+	return [file_list, Markup(html.unescape(json_obj_in_html))]
 
