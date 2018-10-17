@@ -25,7 +25,7 @@ button{text-transform:none;}
 button,input[type=submit]{-webkit-appearance:button;cursor:pointer;}
 button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0;}
 input{line-height:normal;}
-table{border-spacing:0;border-collapse:collapse;}
+table{border-spacing:0;border-collapse:collapse;font-size: medium}
 td,th{padding:0;}
 @media print{
 *,:after,:before{color:#000!important;text-shadow:none!important;background:0 0!important;-webkit-box-shadow:none!important;box-shadow:none!important;}
@@ -47,7 +47,7 @@ a{color:#337ab7;text-decoration:none;}
 a:focus,a:hover{color:#23527c;}
 a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px;}
 h1,h2{font-family:inherit;font-weight:500;line-height:1.1;color:inherit;}
-h1,h2{margin-top:20px;margin-bottom:10px;}
+h1,h2{margin-top:20px;margin-bottom:10px;display: inline-block}
 h1{font-size:36px;}
 h2{font-size:30px;}
 p{margin:0 0 10px;}
@@ -84,7 +84,7 @@ th{text-align:left;}
 @media screen and (min-width:768px){
 .jumbotron{padding-top:48px;padding-bottom:48px;}
 .container .jumbotron{padding-right:60px;padding-left:60px;}
-.jumbotron h1{font-size:63px;}
+.jumbotron h1{font-size:63px;text-align: center}
 }
 .clearfix:after,.clearfix:before,.container:after,.container:before,.nav:after,.nav:before{display:table;content:" ";}
 .clearfix:after,.container:after,.nav:after{clear:both;}
@@ -99,9 +99,18 @@ input{text-align:center;background-color:#ECF0F1;border:2px solid transparent;bo
 input:focus{border:2px solid #3498DB;box-shadow:none;}
 h1{text-align:center;}
 h2{font-size:xx-large;}
-input[id=dropbtn]{background:#3498db;background-image:-webkit-linear-gradient(top, #3498db, #2980b9);background-image:-moz-linear-gradient(top, #3498db, #2980b9);background-image:-ms-linear-gradient(top, #3498db, #2980b9);background-image:-o-linear-gradient(top, #3498db, #2980b9);background-image:linear-gradient(to bottom, #3498db, #2980b9);text-shadow:1px 1px 3px #666666;font-family:Arial;color:#ffffff;font-size:35px;padding:3px 15px 15px 3px;border:solid #1f628d 2px;text-decoration:none;float:left;}
+input[id=dropbtn]{background:#3498db;background-image:-webkit-linear-gradient(top, #3498db, #2980b9);background-image:-moz-linear-gradient(top, #3498db, #2980b9);background-image:-ms-linear-gradient(top, #3498db, #2980b9);background-image:-o-linear-gradient(top, #3498db, #2980b9);background-image:linear-gradient(to bottom, #3498db, #2980b9);text-shadow:1px 1px 3px #666666;font-family:Arial;color:#ffffff;font-size:20px;padding:5px 0px 5px 0px;border:solid #1f628d 2px;text-decoration:none;float:left;}
 input[id=dropbtn]:hover{background:#3cb0fd;background-image:-webkit-linear-gradient(top, #3cb0fd, #3498db);background-image:-moz-linear-gradient(top, #3cb0fd, #3498db);background-image:-ms-linear-gradient(top, #3cb0fd, #3498db);background-image:-o-linear-gradient(top, #3cb0fd, #3498db);background-image:linear-gradient(to bottom, #3cb0fd, #3498db);text-decoration:none;}
-
+.timebutton1 {
+    float: right;
+    display: inline;
+    width: 49%;
+}
+.timebutton2{
+    float: left;
+    display: inline;
+    width: 49%;
+}
 .dropbtn1 {
     background-color:#3498DB;
     color:white;
@@ -202,7 +211,7 @@ input[id=duration_text]:focus{
 
 .navbar a {
     float: left;
-    font-size: 42px;
+    font-size: 32px;
     color: white;
     text-align: center;
     padding: 14px 16px;
@@ -215,7 +224,7 @@ input[id=duration_text]:focus{
 }
 
 .dropdown .dropbtn {
-    font-size: 42px;
+    font-size: 32px;
     border: none;
     outline: none;
     color: white;
@@ -231,6 +240,7 @@ input[id=duration_text]:focus{
 
 .dropdown-content {
     display: none;
+    font-size: 11px;
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;

@@ -1,15 +1,12 @@
 <!-- watersys.html-->
 <!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-</head>
+
 <body>
 	{% extends "base.html" %} {% block title %}Watering System{% endblock %} {% block body %}
 	<div class="jumbotron">
 		<div class="timebutton1">
-			<h1>Watering system control panel</h1>
-			<h1>Set new timer</h1>
+
 			<h2>Choose a watering time</h2>
 			<div class="dropdown1">
 				<button class="dropbtn1" onclick="drop1Function()">Dropdown</button>
@@ -28,7 +25,7 @@
 			</div>
 		</div>
 		<p class="durationbutton"></p>
-		<h2>Choose watering duration (seconds)</h2>
+		<h2><br>Choose watering duration (seconds)</h2>
 		<div class="water_duration">
 			Watering Duration: <input id="duration_text" type="text" value="30"><button class="dropbtn3" onclick="durationFunction()">OK</button>
 			<form action='/water_time' method="post">
@@ -46,7 +43,8 @@
 		<div class="currenttime">
 			{{current_timer}}
 		</div>
-		<div class="table">
+
+        <div class="table">
 			{{table_data}}
 		</div>
         </div>
